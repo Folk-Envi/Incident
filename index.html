@@ -82,7 +82,7 @@
         form.addEventListener('submit', e => {
           e.preventDefault()
           fetch(scriptURL, { method: 'POST', body: new FormData(form)})
-            .then(response => document.getElementById("demo").innerHTML = "<div class='alert alert-primary' role='alert'><b></b></div>", สมุดรับแจ้งเหตุการณ์.reset())
+            .then(response => document.getElementById("demo").innerHTML = สมุดรับแจ้งเหตุการณ์.reset())
             .catch(error => console.error('Error!', error.message))
             Swal.fire({
                 title: "บันทึกผลเรียบร้อย!",
