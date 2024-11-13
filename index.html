@@ -86,17 +86,43 @@
         const form = document.forms['สมุดรับแจ้งเหตุการณ์']
         
         form.addEventListener('submit', e => {
-          e.preventDefault()
-          fetch(scriptURL, { method: 'POST', body: new FormData(form)})
-            .then(response => document.getElementById("demo").innerHTML = สมุดรับแจ้งเหตุการณ์.reset())
-            .catch(error => console.error('Error!', error.message))
-            Swal.fire({
-                title: "บันทึกผลเรียบร้อย!",
-                icon: "success"
-            });
-        })
-    </script>
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+          e.preventDefault();
+  
+          // แสดง SweetAlert "รอสักครู่"
+          Swal.fire({
+              title: "รอสักครู่",
+              text: "กำลังบันทึกข้อมูล...",
+              allowOutsideClick: false, // ปิดการคลิกนอกเพื่อปิด
+              showConfirmButton: false, // ไม่แสดงปุ่มยืนยัน
+              onBeforeOpen: () => {
+                  Swal.showLoading();
+              }
+          });
+  
+          fetch(scriptURL, { method: 'POST', body: new FormData(form) })
+              .then(response => {
+                  // ลบข้อความใน demo ถ้ามีการใช้งานอยู่
+                  document.getElementById("demo").innerHTML = "";
+                  // รีเซ็ตฟอร์มเมื่อบันทึกข้อมูลเสร็จแล้ว
+                  form.reset();
+                  
+                  // ปิด SweetAlert "รอสักครู่"
+                  Swal.close();
+  
+                  // แสดงการแจ้งเตือนสำเร็จด้วย Swal.fire
+                  Swal.fire({
+                      title: "บันทึกข้อมูลเรียบร้อยแล้ว",
+                      icon: "success"
+                  });
+              })
+              .catch(error => {
+                  // ปิด SweetAlert "รอสักครู่" เมื่อเกิดข้อผิดพลาด
+                  Swal.close();
+                  console.error('Error!', error.message);
+              });
+      });
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 
 </html>
